@@ -12,10 +12,12 @@ This Python script is an input filter designed to convert Visual Basic 6.0 sourc
 
 ## Usage
 
-1. Place `build_document.bat` and `build_document_main.ps1` in any folder and create a `DoxyVB6` folder.
+1. Place `build_document.bat` and `build_document_main.ps1` in any folder. And create a `DoxyVB6` folder in the folder.
 2. Place `DoxyVB6.exe` and `Doxyfile` in the `DoxyVB6` folder.
-3. Create a shortcut to `build_document.bat` at the same directory level as the `modules` folder. Open the shortcut properties and leave the working folder field blank.
+3. Create a shortcut to `build_document.bat` in the same directory that contains your `modules` folder. Leave the `Start in` field blank in the shortcut properties.
 4. Double-click the shortcut to generate a `doc` folder.
+
+Please refer to the [example](https://github.com/tkmr-akhs/DoxyVB6/tree/main/example) directory in the GitHub repository for sample usage.
 
 # ExcelModuleManager
 
@@ -32,8 +34,12 @@ A PowerShell module for exporting and importing modules to and from Excel files.
 ## Usage
 
 1. Enable the checkbox for `[Trust access to the VBA project object model]` in Excel by going to `[File]` > `[Options]` > `[Trust Center]` > `[Macro Settings]`.
-2. Drag and drop the Excel file you want to export onto `export_one.bat`.
-3. A new `modules` folder will be created, containing the exported module files. (Any pre-existing `modules` folder will be forcibly deleted before processing.)
+2. Place `export_one.bat` and `export_one_main.ps1` in any folder.
+3. Create a shortcut to `export_one.bat` and place it in the same directory as your .xlsm file.
+4. Drag and drop your .xlsm file onto the shortcut you just created.
+5. A new `modules` folder will be created, containing the exported module files. (Any pre-existing `modules` folder will be forcibly deleted before processing.)
+
+Please refer to the [example](https://github.com/tkmr-akhs/DoxyVB6/tree/main/example) directory in the GitHub repository for sample usage.
 
 # License
 
