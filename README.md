@@ -2,12 +2,12 @@
 
 ## Overview
 
-This Python script is an input filter designed to convert Visual Basic 6.0 source code into a format recognizable by Doxygen. It is based on the processing logic of `vbfilter.py` (VB6 to C conversion), which was originally created by Basti Grembowietz and later modified by Ryo Satsuki.
+This Python script is an input filter designed to convert Visual Basic 6.0 source code into a format recognizable by [Doxygen](https://www.doxygen.nl/). It is based on the processing logic of `vbfilter.py` (VB6 to C conversion), which was originally created by Basti Grembowietz and later modified by Ryo Satsuki.
 
 ## Features
 
 - Converts VB comments into Doxygen-style documentation. Lines starting with `'*` are treated as comments for the subsequent members, while lines starting with `'!` are treated as comments for the module itself.  
-- Processes functions, subroutines, properties, enums, constants, and variables. (The internal code of functions, subroutines, and properties is not processed.)
+- Processes functions, subprocedures, properties, enums, constants, and variables. (The internal code of functions, subprocedures, and properties is not processed.)
 - For class modules, if you include the comment `'# Interface` in the code, it will be treated as an interface.
 
 ## Usage
@@ -31,8 +31,9 @@ A PowerShell module for exporting and importing modules to and from Excel files.
 
 ## Usage
 
-1. Drag and drop the Excel file you want to export onto `export_one.bat`.
-2. A new `modules` folder will be created, containing the exported module files. (Any pre-existing `modules` folder will be forcibly deleted before processing.)
+1. Enable the checkbox for `[Trust access to the VBA project object model]` in Excel by going to `[File]` > `[Options]` > `[Trust Center]` > `[Macro Settings]`.
+2. Drag and drop the Excel file you want to export onto `export_one.bat`.
+3. A new `modules` folder will be created, containing the exported module files. (Any pre-existing `modules` folder will be forcibly deleted before processing.)
 
 # License
 
