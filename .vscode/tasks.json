@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build with pyinstaller",
+			"type": "shell",
+			"command": "./build_env/build.sh",
+			"windows": {
+				"command": "./build_env/build.bat",
+			},
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false,
+			}
+		}
+	]
+}

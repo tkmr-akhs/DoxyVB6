@@ -1,0 +1,27 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    "python.testing.pytestArgs": [
+        "tests",
+        "--cov=src",
+        "--cov-report",
+        "xml"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
+    "python.linting.ignorePatterns": [
+        "**/site-packages/**/*.py",
+        ".vscode/*.py",
+        "tests/**"
+    ],
+    "python.linting.pylintArgs": [
+        "--ignore-paths",
+        ".*src/python-.+-win/.*,.*tests/.*"
+    ],
+    "pylint.interpreter": [
+        "${workspaceFolder}/.venv/Scripts/python.exe"
+    ],
+    "coverage-gutters.showGutterCoverage": true,
+    "coverage-gutters.showLineCoverage": true,
+    "coverage-gutters.showRulerCoverage": true
+}

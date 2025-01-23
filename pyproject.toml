@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "DoxyVB6"
+version = "0.0.0"
+description = ""
+authors = ["TAKAMURA Akihisa <tkmr.akhs@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "DoxyVB6", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+pyinstaller = "^6.11.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.11.1"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+pytest-mock = "^3.14.0"
+pytest-raises = "^0.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
