@@ -17,7 +17,7 @@ This Python script is an input filter designed to convert Visual Basic 6.0 sourc
 3. Create a shortcut to `build_document.bat` in the same directory that contains your `modules` folder. Leave the `Start in` field blank in the shortcut properties.
 4. Double-click the shortcut to generate a `doc` folder.
 
-Please refer to the [example](https://github.com/tkmr-akhs/DoxyVB6/tree/main/example) directory in the GitHub repository for sample usage.
+Please refer to the [example](./example) directory in the GitHub repository for sample usage.
 
 # ExcelModuleManager
 
