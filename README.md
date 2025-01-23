@@ -39,7 +39,7 @@ A PowerShell module for exporting and importing modules to and from Excel files.
 4. Drag and drop your .xlsm file onto the shortcut you just created.
 5. A new `modules` folder will be created, containing the exported module files. (Any pre-existing `modules` folder will be forcibly deleted before processing.)
 
-Please refer to the [example](https://github.com/tkmr-akhs/DoxyVB6/tree/main/example) directory in the GitHub repository for sample usage.
+Please refer to the [example](./example) directory in the GitHub repository for sample usage.
 
 # License
 
