@@ -29,6 +29,16 @@ _replacements = {
 
 
 class CsharpGenerator(AbstractCodeGenerator):
+    """Generator for C# source code.
+
+    This class is responsible for converting `CodeElement` objects into C# code lines.
+    It supports various code constructs such as classes, methods, properties, and enums,
+    ensuring that the output adheres to C# syntax and conventions.
+
+    Attributes:
+        None: This class currently does not define additional attributes.
+    """
+
     def generate(self, parse_result: CodeParseResult) -> List[str]:
         """
         Generates code from the given parse result.
@@ -40,7 +50,8 @@ class CsharpGenerator(AbstractCodeGenerator):
             List[str]: The generated code lines.
         """
         code_lines: List[str] = []
-        self._generate_common(code_lines, 0, parse_result.root)
+        for child_item in parse_result.root.childs:
+            self._generate_common(code_lines, 0, child_item)
         return code_lines
 
     def _generate_common(
@@ -50,7 +61,9 @@ class CsharpGenerator(AbstractCodeGenerator):
         target_elem: CodeElement,
         as_intf: bool = False,
     ):
-        if target_elem.elem_type == CodeElementType.VAR:
+        if target_elem.elem_type == CodeElementType.OTHER:
+            self._generate_other(code_lines, indent, target_elem)
+        elif target_elem.elem_type == CodeElementType.VAR:
             self._generate_var(code_lines, indent, target_elem)
         elif target_elem.elem_type == CodeElementType.CONST:
             self._generate_const(code_lines, indent, target_elem)
@@ -73,7 +86,7 @@ class CsharpGenerator(AbstractCodeGenerator):
         elif target_elem.elem_type == CodeElementType.PROPERTY:
             self._generate_property(code_lines, indent, target_elem)
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(f"Unknown type: {target_elem.elem_type}")
 
     def _get_indent_str(self, indent: int) -> str:
         """Gets the indentation string based on the given indentation level."""
@@ -174,6 +187,16 @@ class CsharpGenerator(AbstractCodeGenerator):
             raise CannotGenerateException(
                 "The property has neither a getter nor a setter."
             )
+
+    def _generate_other(
+        self, code_lines: List[str], indent: int, target_elem: CodeElement
+    ):
+        indent_str = self._get_indent_str(indent)
+        if "using" in target_elem.others:
+            for using_item in target_elem.others["using"]:
+                code_lines.append(indent_str + f"using {using_item};")
+        else:
+            raise CannotGenerateException(f"Unknown element.: {target_elem.name}")
 
     def _generate_var(
         self, code_lines: List[str], indent: int, target_elem: CodeElement

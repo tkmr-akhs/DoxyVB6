@@ -193,14 +193,17 @@ class Vb6Parser(AbstractCodeParser):
         return CodeParseResult(root_elem)
 
     def _parse_cls(self, code_lines: List[str]) -> CodeElement:
-        if self.module_type == Vb6ModuleType.FORM:
-            root_elem = CodeElement("Form", CodeElementType.NAME_SPACE)
-        else:
-            root_elem = CodeElement("Class", CodeElementType.NAME_SPACE)
+        root_elem = CodeElement("root", CodeElementType.OTHER)
 
-        self._process_global_comments(code_lines, root_elem)
+        if self.module_type == Vb6ModuleType.FORM:
+            target_elem = CodeElement("Form", CodeElementType.NAME_SPACE)
+        else:
+            target_elem = CodeElement("Class", CodeElementType.NAME_SPACE)
+        root_elem.childs.append(target_elem)
+
+        self._process_global_comments(code_lines, target_elem)
         is_intf = self._has_intf_tag(code_lines)
-        target_elem = self._process_class_name(code_lines, root_elem, is_intf)
+        target_elem = self._process_class_name(code_lines, target_elem, is_intf)
         self._process_impl(code_lines, target_elem)
 
         inTypeSearch = False
@@ -294,10 +297,15 @@ class Vb6Parser(AbstractCodeParser):
         return root_elem
 
     def _parse_bas(self, code_lines: List[str]) -> CodeElement:
-        root_elem = CodeElement("Standard", CodeElementType.NAME_SPACE)
+        root_elem = CodeElement("root", CodeElementType.OTHER)
+        root_elem.childs.append(
+            CodeElement("using", CodeElementType.OTHER, using=["Class"])
+        )
+        target_elem = CodeElement("Standard", CodeElementType.NAME_SPACE)
+        root_elem.childs.append(target_elem)
 
-        self._process_global_comments(code_lines, root_elem)
-        target_elem = self._process_class_name(code_lines, root_elem)
+        self._process_global_comments(code_lines, target_elem)
+        target_elem = self._process_class_name(code_lines, target_elem)
 
         inTypeSearch = False
 
