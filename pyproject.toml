@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "DoxyVB6"
-version = "0.0.0"
+version = "0.1.0"
 description = ""
 authors = ["TAKAMURA Akihisa <tkmr.akhs@gmail.com>"]
 readme = "README.md"
