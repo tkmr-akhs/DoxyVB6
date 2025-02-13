@@ -27,8 +27,9 @@ _PSELEM_KIND_RE = r"Property\s+(Set|Let)\s+"
 _ELEM_NAME_RE = r"(\w+)"
 _VAL_NAME_RE = r"(\w+)(\([^\)]*\))?"
 
-_VAL_TYPE_RE = r"(?:\s+As\s+([\w]+))?"
-_RET_TYPE_RE = r"(?:\s*As\s+([\w]+)(\(\))?)?"
+_VAL_TYPE_RE = r"(?:\s+As\s+([\w.]+))?"
+_MVAL_TYPE_RE = r"(?:\s+As\s+(?:New\s+)?([\w.]+))?"
+_RET_TYPE_RE = r"(?:\s*As\s+([\w.]+)(\(\))?)?"
 
 _STRLIT_RE = r'"(?:[^"]|"")*"'
 _DATELIT_RE = r"\#[^#]*\#"
@@ -57,7 +58,7 @@ _VAL_RE = (
     + _VAL_KIND_RE
     + r")|Dim\s+)"
     + _VAL_NAME_RE
-    + _VAL_TYPE_RE
+    + _MVAL_TYPE_RE
     + _VAL_VALUE_RE
     + r"\s*$"
 )
