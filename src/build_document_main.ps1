@@ -3,6 +3,7 @@ $InformationPreference = 'Continue'
 
 Set-Variable -Name SRC_DIR_NAME -Value "modules" -Option Constant
 Set-Variable -Name DST_DIR_NAME -Value "doc" -Option Constant
+Set-Variable -Name ARCHIVE -Value $true -Option Constant
 
 if ([System.String]::IsNullOrEmpty($args[0])) {
     $proj_root = Get-Location
@@ -57,6 +58,8 @@ if (Test-Path $dst_dir) {
     Remove-Item $dst_dir -Recurse -Force
 }
 Move-Item $tmp_dst_dir $dst_dir
-
+if ($ARCHIVE) {
+    Compress-Archive -Path $dst_dir -DestinationPath ($dst_dir + ".zip") -Force
+}
 # Delete the temporary folder
 Remove-Item $tmp_root -Recurse -Force
