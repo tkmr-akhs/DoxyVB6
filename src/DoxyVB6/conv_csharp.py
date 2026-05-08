@@ -28,7 +28,7 @@ _replacements = {
 }
 
 
-class CsharpGenerator(AbstractCodeGenerator):
+class CSharpGenerator(AbstractCodeGenerator):
     """Generator for C# source code.
 
     This class is responsible for converting `CodeElement` objects into C# code lines.
@@ -50,7 +50,7 @@ class CsharpGenerator(AbstractCodeGenerator):
             List[str]: The generated code lines.
         """
         code_lines: List[str] = []
-        for child_item in parse_result.root.childs:
+        for child_item in parse_result.root.children:
             self._generate_common(code_lines, 0, child_item)
         return code_lines
 
@@ -81,7 +81,7 @@ class CsharpGenerator(AbstractCodeGenerator):
             self._generate_intf(code_lines, indent, target_elem)
         elif target_elem.elem_type == CodeElementType.ENUM:
             self._generate_enum(code_lines, indent, target_elem)
-        elif target_elem.elem_type == CodeElementType.NAME_SPACE:
+        elif target_elem.elem_type == CodeElementType.NAMESPACE:
             self._generate_namespace(code_lines, indent, target_elem)
         elif target_elem.elem_type == CodeElementType.PROPERTY:
             self._generate_property(code_lines, indent, target_elem)
@@ -269,7 +269,7 @@ class CsharpGenerator(AbstractCodeGenerator):
         elem_getset = self._get_getset_str(target_elem)
         code_lines.append(
             indent_str
-            + f"{elem_access}{elem_static}{target_elem.return_type} {target_elem.name} {{ {elem_getset} }})"
+            + f"{elem_access}{elem_static}{target_elem.return_type} {target_elem.name} {{ {elem_getset} }}"
         )
 
     def _generate_struct(
@@ -280,7 +280,7 @@ class CsharpGenerator(AbstractCodeGenerator):
         elem_access = self._get_access_str(target_elem)
         code_lines.append(indent_str + f"{elem_access}struct {target_elem.name}")
         code_lines.append("{")
-        for child_elem in target_elem.childs:
+        for child_elem in target_elem.children:
             if child_elem.elem_type == CodeElementType.DOC_COMMENT_LINE:
                 self._generate_doc_line(code_lines, indent + 1, child_elem)
             elif child_elem.elem_type == CodeElementType.DOC_COMMENT_MULTI:
@@ -301,7 +301,7 @@ class CsharpGenerator(AbstractCodeGenerator):
         elem_access = self._get_access_str(target_elem)
         code_lines.append(indent_str + f"{elem_access}enum {target_elem.name}")
         code_lines.append("{")
-        for child_elem in target_elem.childs:
+        for child_elem in target_elem.children:
             if child_elem.elem_type == CodeElementType.DOC_COMMENT_LINE:
                 self._generate_doc_line(code_lines, indent + 1, child_elem)
             elif child_elem.elem_type == CodeElementType.DOC_COMMENT_MULTI:
@@ -339,7 +339,7 @@ class CsharpGenerator(AbstractCodeGenerator):
             + f"{elem_access}{elem_static}class {target_elem.name}{elem_super}"
         )
         code_lines.append(indent_str + "{")
-        for child_elem in target_elem.childs:
+        for child_elem in target_elem.children:
             self._generate_common(code_lines, indent + 1, child_elem)
         code_lines.append(indent_str + "}")
         code_lines.append(indent_str)
@@ -368,7 +368,7 @@ class CsharpGenerator(AbstractCodeGenerator):
             + f"{elem_access}{elem_static}interface {target_elem.name}{elem_super}"
         )
         code_lines.append(indent_str + "{")
-        for child_elem in target_elem.childs:
+        for child_elem in target_elem.children:
             self._generate_common(code_lines, indent + 1, child_elem, True)
         code_lines.append(indent_str + "}")
         code_lines.append(indent_str)
@@ -379,6 +379,6 @@ class CsharpGenerator(AbstractCodeGenerator):
         indent_str = self._get_indent_str(indent)
         code_lines.append(indent_str + f"namespace {target_elem.name}")
         code_lines.append("{")
-        for child_elem in target_elem.childs:
+        for child_elem in target_elem.children:
             self._generate_common(code_lines, indent + 1, child_elem)
         code_lines.append("}")

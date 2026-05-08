@@ -95,7 +95,7 @@ class Test_conv_vb6:
 
         # Assert
         assert actual is False
-        assert len(target_elem.childs) == 0
+        assert len(target_elem.children) == 0
 
     @staticmethod
     def test_found_member2():
@@ -108,7 +108,7 @@ class Test_conv_vb6:
 
         # Assert
         assert actual is False
-        assert len(target_elem.childs) == 0
+        assert len(target_elem.children) == 0
 
     @staticmethod
     def test_found_member3():
@@ -121,7 +121,7 @@ class Test_conv_vb6:
 
         # Assert
         assert actual is False
-        assert len(target_elem.childs) == 0
+        assert len(target_elem.children) == 0
 
     @staticmethod
     def test_found_member4():
@@ -134,14 +134,14 @@ class Test_conv_vb6:
 
         # Assert
         assert actual is True
-        assert len(target_elem.childs) == 1
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.VAR
-        assert target_elem.childs[0].return_type == "Variant"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PUBLIC
-        assert target_elem.childs[0].value == ""
-        assert target_elem.childs[0].is_str is False
+        assert len(target_elem.children) == 1
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.VAR
+        assert target_elem.children[0].return_type == "Variant"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PUBLIC
+        assert target_elem.children[0].value == ""
+        assert target_elem.children[0].is_str is False
 
     @staticmethod
     def test_found_member5():
@@ -154,14 +154,14 @@ class Test_conv_vb6:
 
         # Assert
         assert actual is True
-        assert len(target_elem.childs) == 1
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.CONST
-        assert target_elem.childs[0].return_type == "Variant"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
-        assert target_elem.childs[0].value == ""
-        assert target_elem.childs[0].is_str is False
+        assert len(target_elem.children) == 1
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.CONST
+        assert target_elem.children[0].return_type == "Variant"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].value == ""
+        assert target_elem.children[0].is_str is False
 
     @staticmethod
     def test_found_member6():
@@ -176,14 +176,14 @@ class Test_conv_vb6:
 
         # Assert
         assert actual is True
-        assert len(target_elem.childs) == 1
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.CONST
-        assert target_elem.childs[0].return_type == "String[]"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.INTERNAL
-        assert target_elem.childs[0].value == 'Test " String'
-        assert target_elem.childs[0].is_str is True
+        assert len(target_elem.children) == 1
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.CONST
+        assert target_elem.children[0].return_type == "String[]"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.INTERNAL
+        assert target_elem.children[0].value == 'Test " String'
+        assert target_elem.children[0].is_str is True
 
     @staticmethod
     def test_find_function():
@@ -199,7 +199,7 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is False
         assert actual[1] == target_elem
-        assert len(target_elem.childs) == 0
+        assert len(target_elem.children) == 0
 
     @staticmethod
     def test_find_function2():
@@ -213,11 +213,11 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.FUNC
-        assert target_elem.childs[0].return_type == "Variant"
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PUBLIC
+        assert len(target_elem.children) == 1
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.FUNC
+        assert target_elem.children[0].return_type == "Variant"
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PUBLIC
 
     @staticmethod
     def test_find_function3():
@@ -234,17 +234,17 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.FUNC
-        assert target_elem.childs[0].return_type == "TestClass[]"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.FUNC
+        assert target_elem.children[0].return_type == "TestClass[]"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
-        assert target_elem.childs[0].arguments[0].name == "Arg1"
-        assert target_elem.childs[0].arguments[0].default_value == 'Test " String'
-        assert target_elem.childs[0].arguments[0].is_str is True
+        assert target_elem.children[0].arguments[0].name == "Arg1"
+        assert target_elem.children[0].arguments[0].default_value == 'Test " String'
+        assert target_elem.children[0].arguments[0].is_str is True
 
     @staticmethod
     def test_find_function4():
@@ -261,7 +261,7 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
         assert len(actual[1].arguments) == 3
         assert actual[1].arguments[0].is_optional is False
@@ -288,17 +288,17 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.FUNC
-        assert target_elem.childs[0].return_type == "void"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.FUNC
+        assert target_elem.children[0].return_type == "void"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
-        assert target_elem.childs[0].arguments[0].name == "Arg1"
-        assert target_elem.childs[0].arguments[0].default_value == 'Test " String'
-        assert target_elem.childs[0].arguments[0].is_str is True
+        assert target_elem.children[0].arguments[0].name == "Arg1"
+        assert target_elem.children[0].arguments[0].default_value == 'Test " String'
+        assert target_elem.children[0].arguments[0].is_str is True
 
     @staticmethod
     def test_find_type3():
@@ -315,11 +315,11 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.STRUCT
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.STRUCT
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
     @staticmethod
     def test_find_enum3():
@@ -336,11 +336,11 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.ENUM
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.ENUM
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
     @staticmethod
     def test_find_property_get3():
@@ -356,15 +356,15 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.PROPERTY
-        assert target_elem.childs[0].return_type == "TestClass[]"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.PROPERTY
+        assert target_elem.children[0].return_type == "TestClass[]"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
-        assert len(target_elem.childs[0].arguments) == 0
+        assert len(target_elem.children[0].arguments) == 0
 
     @staticmethod
     def test_find_property_set3():
@@ -382,17 +382,17 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.PROPERTY
-        assert target_elem.childs[0].return_type == "void"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.PROPERTY
+        assert target_elem.children[0].return_type == "void"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
-        assert target_elem.childs[0].arguments[0].name == "NewValue"
-        assert target_elem.childs[0].arguments[0].type == "TestClass[]"
-        assert target_elem.childs[0].arguments[0].is_str is False
+        assert target_elem.children[0].arguments[0].name == "NewValue"
+        assert target_elem.children[0].arguments[0].type == "TestClass[]"
+        assert target_elem.children[0].arguments[0].is_str is False
 
     @staticmethod
     def test_find_property():
@@ -413,17 +413,17 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.PROPERTY
-        assert target_elem.childs[0].return_type == "TestClass[]"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.PROPERTY
+        assert target_elem.children[0].return_type == "TestClass[]"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
-        assert target_elem.childs[0].arguments[0].name == "NewValue"
-        assert target_elem.childs[0].arguments[0].type == "TestClass[]"
-        assert target_elem.childs[0].arguments[0].is_str is False
+        assert target_elem.children[0].arguments[0].name == "NewValue"
+        assert target_elem.children[0].arguments[0].type == "TestClass[]"
+        assert target_elem.children[0].arguments[0].is_str is False
 
     @staticmethod
     def test_find_property2():
@@ -446,17 +446,17 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] != target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1
 
-        assert target_elem.childs[0].name == "Test"
-        assert target_elem.childs[0].elem_type == CodeElementType.PROPERTY
-        assert target_elem.childs[0].return_type == "TestClass[]"
-        assert target_elem.childs[0].is_static is False
-        assert target_elem.childs[0].accessibility == CodeElementAccessibility.PRIVATE
+        assert target_elem.children[0].name == "Test"
+        assert target_elem.children[0].elem_type == CodeElementType.PROPERTY
+        assert target_elem.children[0].return_type == "TestClass[]"
+        assert target_elem.children[0].is_static is False
+        assert target_elem.children[0].accessibility == CodeElementAccessibility.PRIVATE
 
-        assert target_elem.childs[0].arguments[0].name == "NewValue"
-        assert target_elem.childs[0].arguments[0].type == "TestClass[]"
-        assert target_elem.childs[0].arguments[0].is_str is False
+        assert target_elem.children[0].arguments[0].name == "NewValue"
+        assert target_elem.children[0].arguments[0].type == "TestClass[]"
+        assert target_elem.children[0].arguments[0].is_str is False
 
     @staticmethod
     def test_process_enum():
@@ -473,4 +473,4 @@ class Test_conv_vb6:
         # Assert
         assert actual[0] is True
         assert actual[1] == target_elem
-        assert len(target_elem.childs) == 1
+        assert len(target_elem.children) == 1

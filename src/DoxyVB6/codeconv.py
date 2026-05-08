@@ -17,7 +17,7 @@ class CodeElementType(Enum):
         CLASS (int): Represents a class.
         INTERFACE (int): Represents a class.
         ENUM (int): Represents an enumeration.
-        NAME_SPACE (int): Represents a namespace.
+        NAMESPACE (int): Represents a namespace.
         PROPERTY (int): Represents a property.
     """
 
@@ -31,7 +31,7 @@ class CodeElementType(Enum):
     CLASS = 7
     INTERFACE = 8
     ENUM = 9
-    NAME_SPACE = 10
+    NAMESPACE = 10
     PROPERTY = 11
 
 
@@ -197,7 +197,7 @@ class CodeElement:
         self.others = kwargs
         self._parent: "CodeElement" = None
 
-        self._childs = CodeElementList(self)
+        self._children = CodeElementList(self)
         self._args: List[CodeElementArgument] = []
 
     @property
@@ -211,14 +211,14 @@ class CodeElement:
         return self._parent
 
     @property
-    def childs(self) -> CodeElementList:
+    def children(self) -> CodeElementList:
         """
         Gets the child elements of the code element.
 
         Returns:
             CodeElementList: The child code element list.
         """
-        return self._childs
+        return self._children
 
     @property
     def arguments(self) -> List[CodeElementArgument]:

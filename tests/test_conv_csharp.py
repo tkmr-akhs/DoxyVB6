@@ -23,7 +23,7 @@ class Test_conv_vb6:
         target_elem.arguments.append(CodeElementArgument("TestArg1", "TestClass"))
         target_elem.arguments.append(CodeElementArgument("TestArg2", "TestClass"))
         target_elem.arguments.append(CodeElementArgument("TestArg3", "TestClass"))
-        csharp_generator = conv_csharp.CsharpGenerator()
+        csharp_generator = conv_csharp.CSharpGenerator()
 
         # Act
         actual = csharp_generator._get_args_str(target_elem)

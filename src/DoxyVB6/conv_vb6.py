@@ -14,7 +14,7 @@ from enum import Enum
 _ELEM_DEFAULT_ACCESS_LEVEL = "public"
 _VAR_DEFAULT_ACCESS_LEVEL = "private"
 
-_ACCESS_LEVEL_RE = r"(Grobal\s+|Public\s+|Friend\s+|Private\s+|Static\s+)"
+_ACCESS_LEVEL_RE = r"(Global\s+|Public\s+|Friend\s+|Private\s+|Static\s+)"
 
 _VAL_KIND_RE = r"(Const\s+)"
 _TELEM_KIND_RE = r"Type\s+"
@@ -197,10 +197,10 @@ class Vb6Parser(AbstractCodeParser):
         root_elem = CodeElement("root", CodeElementType.OTHER)
 
         if self.module_type == Vb6ModuleType.FORM:
-            target_elem = CodeElement("Form", CodeElementType.NAME_SPACE)
+            target_elem = CodeElement("Form", CodeElementType.NAMESPACE)
         else:
-            target_elem = CodeElement("Class", CodeElementType.NAME_SPACE)
-        root_elem.childs.append(target_elem)
+            target_elem = CodeElement("Class", CodeElementType.NAMESPACE)
+        root_elem.children.append(target_elem)
 
         self._process_global_comments(code_lines, target_elem)
         is_intf = self._has_intf_tag(code_lines)
@@ -299,11 +299,11 @@ class Vb6Parser(AbstractCodeParser):
 
     def _parse_bas(self, code_lines: List[str]) -> CodeElement:
         root_elem = CodeElement("root", CodeElementType.OTHER)
-        root_elem.childs.append(
+        root_elem.children.append(
             CodeElement("using", CodeElementType.OTHER, using=["Class"])
         )
-        target_elem = CodeElement("Standard", CodeElementType.NAME_SPACE)
-        root_elem.childs.append(target_elem)
+        target_elem = CodeElement("Standard", CodeElementType.NAMESPACE)
+        root_elem.children.append(target_elem)
 
         self._process_global_comments(code_lines, target_elem)
         target_elem = self._process_class_name(code_lines, target_elem)
@@ -465,7 +465,7 @@ class Vb6Parser(AbstractCodeParser):
 
         if accessibility == "private":
             return CodeElementAccessibility.PRIVATE, False
-        elif accessibility == "grobal":
+        elif accessibility == "global":
             return CodeElementAccessibility.PUBLIC, False
         elif accessibility == "public":
             return CodeElementAccessibility.PUBLIC, False
@@ -534,7 +534,7 @@ class Vb6Parser(AbstractCodeParser):
                     gcom_obj = CodeElement(
                         "", CodeElementType.DOC_COMMENT_LINE, elem_value=gcom_str
                     )
-                    target_elem.childs.append(gcom_obj)
+                    target_elem.children.append(gcom_obj)
 
     def _has_intf_tag(self, code_lines: List[str]) -> bool:
         for code_line in code_lines:
@@ -558,7 +558,7 @@ class Vb6Parser(AbstractCodeParser):
         else:
             class_obj = CodeElement(class_name, CodeElementType.CLASS)
 
-        target_elem.childs.append(class_obj)
+        target_elem.children.append(class_obj)
         return class_obj
 
     def _process_impl(self, r: List[str], class_elem: CodeElement):
@@ -582,7 +582,7 @@ class Vb6Parser(AbstractCodeParser):
         com_obj = CodeElement(
             "", CodeElementType.DOC_COMMENT_LINE, elem_value=doxy_result.group(1)
         )
-        target_elem.childs.append(com_obj)
+        target_elem.children.append(com_obj)
         return True
 
     def _found_member(self, s: str, target_elem: CodeElement) -> bool:
@@ -642,7 +642,7 @@ class Vb6Parser(AbstractCodeParser):
             arg_obj = CodeElementArgument("", var_type, is_reference=False)
             var_obj.arguments.append(arg_obj)
 
-        target_elem.childs.append(var_obj)
+        target_elem.children.append(var_obj)
         return True
 
     def _find_function(
@@ -678,7 +678,7 @@ class Vb6Parser(AbstractCodeParser):
         )
 
         func_elem.arguments.extend(args_list)
-        target_elem.childs.append(func_elem)
+        target_elem.children.append(func_elem)
         return True, func_elem
 
     def _process_function(
@@ -716,7 +716,7 @@ class Vb6Parser(AbstractCodeParser):
         )
 
         sub_elem.arguments.extend(args_list)
-        target_elem.childs.append(sub_elem)
+        target_elem.children.append(sub_elem)
         return True, sub_elem
 
     def _process_sub(
@@ -750,7 +750,7 @@ class Vb6Parser(AbstractCodeParser):
             accessibility=access_level,
         )
 
-        target_elem.childs.append(sub_elem)
+        target_elem.children.append(sub_elem)
         return True, sub_elem
 
     def _process_type(
@@ -785,7 +785,7 @@ class Vb6Parser(AbstractCodeParser):
             accessibility=access_level,
         )
 
-        target_elem.childs.append(enum_elem)
+        target_elem.children.append(enum_elem)
         return True, enum_elem
 
     def _process_enum(
@@ -809,7 +809,7 @@ class Vb6Parser(AbstractCodeParser):
                 mem_value = ""
 
             mem_obj = CodeElement(mem_name, CodeElementType.CONST, elem_value=mem_value)
-            target_elem.childs.append(mem_obj)
+            target_elem.children.append(mem_obj)
 
         return True, target_elem
 
@@ -854,7 +854,7 @@ class Vb6Parser(AbstractCodeParser):
                 accessibility=access_level,
                 is_static=is_static,
             )
-            target_elem.childs.append(result_elem)
+            target_elem.children.append(result_elem)
 
         return True, result_elem, result_elem
 
@@ -891,7 +891,7 @@ class Vb6Parser(AbstractCodeParser):
                 is_static=is_static,
             )
             result_elem.arguments.append(args_list[0])
-            target_elem.childs.append(result_elem)
+            target_elem.children.append(result_elem)
 
         return True, result_elem, result_elem
 

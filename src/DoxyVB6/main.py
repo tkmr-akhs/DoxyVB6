@@ -5,7 +5,7 @@ import sys
 
 from .codeconv import AbstractCodeParser, AbstractCodeGenerator
 from .conv_vb6 import Vb6Parser, Vb6ModuleType
-from .conv_csharp import CsharpGenerator
+from .conv_csharp import CSharpGenerator
 
 # from .appinit import init_app
 # from .bkup import BackupFacade
@@ -53,7 +53,7 @@ class Main:
             module_type = Vb6ModuleType.STANDARD
 
         code_parser: AbstractCodeParser = Vb6Parser(module_type)
-        code_generator: AbstractCodeGenerator = CsharpGenerator()
+        code_generator: AbstractCodeGenerator = CSharpGenerator()
         try:
             with open(self._srcfile, "r", encoding=SRC_ENCODING) as f:
                 src_code = f.readlines()
