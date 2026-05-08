@@ -23,5 +23,7 @@
     ],
     "coverage-gutters.showGutterCoverage": true,
     "coverage-gutters.showLineCoverage": true,
-    "coverage-gutters.showRulerCoverage": true
+    "coverage-gutters.showRulerCoverage": true,
+    "python-envs.defaultEnvManager": "ms-python.python:poetry",
+    "python-envs.defaultPackageManager": "ms-python.python:poetry"
 }
