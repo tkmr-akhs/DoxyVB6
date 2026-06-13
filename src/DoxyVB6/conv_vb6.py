@@ -93,7 +93,7 @@ _PGELEM_RE = (
     + r")?"
     + _PGELEM_KIND_RE
     + _ELEM_NAME_RE
-    + r"\s*\(\s*\)\s*"
+    + _ARGS_RE
     + _RET_TYPE_RE
     + r"\s*$"
 )
@@ -165,6 +165,9 @@ _re_end_enum = re.compile(r"End\s+Enum", re.I)
 _re_prop_get = re.compile(_PGELEM_RE, re.I)
 _re_prop_set = re.compile(_PSELEM_RE, re.I)
 _re_end_property = re.compile(r"End\s+Property", re.I)
+_re_user_mem_id = re.compile(
+    r"^\s*Attribute\s+(\w+)\.VB_UserMemId\s*=\s*(-?\d+)\s*$", re.I
+)
 
 
 class Vb6ModuleType(Enum):
@@ -857,9 +860,11 @@ class Vb6Parser(AbstractCodeParser):
             match_result.group(1), _ELEM_DEFAULT_ACCESS_LEVEL
         )
         prop_name = match_result.group(2).strip()
+        args_list = self._build_args_list(match_result.group(3))
+        self._raise_if_non_contiguous_accessor(target_elem, prop_name, prev_elem)
 
-        ret_type = match_result.group(3)
-        ret_arr = match_result.group(4)
+        ret_type = match_result.group(4)
+        ret_arr = match_result.group(5)
         ret_type = self._format_array_type(ret_type, ret_arr)
 
         result_elem = CodeElement(
@@ -870,7 +875,12 @@ class Vb6Parser(AbstractCodeParser):
         )
 
         if not prev_elem is None and prev_elem.name == prop_name:
-            prev_elem.return_type = prev_elem.arguments[0].type
+            self._raise_if_later_accessor_has_comment(target_elem, prop_name)
+            self._raise_if_index_signature_mismatch(
+                prev_elem.others.get("index_arguments", []), args_list, prop_name
+            )
+            prev_elem.return_type = ret_type
+            prev_elem.others["has_get"] = True
             result_elem = prev_elem
         else:
             result_elem = CodeElement(
@@ -880,6 +890,10 @@ class Vb6Parser(AbstractCodeParser):
                 accessibility=access_level,
                 is_static=is_static,
             )
+            result_elem.others["has_get"] = True
+            result_elem.others["has_set"] = False
+            result_elem.others["index_arguments"] = args_list
+            result_elem.others["vb_property_name"] = prop_name
             target_elem.children.append(result_elem)
 
         return True, result_elem, result_elem
@@ -901,13 +915,38 @@ class Vb6Parser(AbstractCodeParser):
         access_level, is_static = self._get_accessibility(
             match_result.group(1), _ELEM_DEFAULT_ACCESS_LEVEL
         )
+        setter_kind = match_result.group(2).strip().lower()
         prop_name = match_result.group(3).strip()
         args_list = self._build_args_list(match_result.group(4))
+        if len(args_list) == 0:
+            raise CannotParseException(
+                f"Property setter '{prop_name}' must have a value argument."
+            )
+        self._raise_if_non_contiguous_accessor(target_elem, prop_name, prev_elem)
+        index_args = args_list[:-1]
+        value_arg = args_list[-1]
 
         if not prev_elem is None and prev_elem.name == prop_name:
+            self._raise_if_later_accessor_has_comment(target_elem, prop_name)
+            self._raise_if_index_signature_mismatch(
+                prev_elem.others.get("index_arguments", []), index_args, prop_name
+            )
+            if (
+                not prev_elem.others.get("has_get", False)
+                and prev_elem.others.get("setter_kind") != setter_kind
+            ):
+                raise CannotParseException(
+                    f"Setter-only Let and Set pair for property '{prop_name}' is ambiguous."
+                )
             if len(prev_elem.arguments) == 0:
-                prev_elem.arguments.append(args_list[0])
-            prev_elem.return_type = prev_elem.arguments[0].type
+                prev_elem.arguments.append(value_arg)
+            if not prev_elem.others.get("has_get", False):
+                prev_elem.return_type = prev_elem.arguments[0].type
+            prev_elem.others["has_set"] = True
+            prev_elem.others["setter_kind"] = setter_kind
+            if len(prev_elem.others.get("index_arguments", [])) == 0:
+                prev_elem.others["index_arguments"] = index_args
+            prev_elem.others["setter_value_argument"] = value_arg
             result_elem = prev_elem
         else:
             result_elem = CodeElement(
@@ -916,14 +955,91 @@ class Vb6Parser(AbstractCodeParser):
                 accessibility=access_level,
                 is_static=is_static,
             )
-            result_elem.arguments.append(args_list[0])
+            result_elem.arguments.append(value_arg)
+            result_elem.others["has_get"] = False
+            result_elem.others["has_set"] = True
+            result_elem.others["setter_kind"] = setter_kind
+            result_elem.others["index_arguments"] = index_args
+            result_elem.others["setter_value_argument"] = value_arg
+            result_elem.others["vb_property_name"] = prop_name
             target_elem.children.append(result_elem)
 
         return True, result_elem, result_elem
 
+    def _raise_if_later_accessor_has_comment(
+        self, target_elem: CodeElement, prop_name: str
+    ):
+        if len(target_elem.children) == 0:
+            return
+
+        last_child = target_elem.children[len(target_elem.children) - 1]
+        if last_child.elem_type != CodeElementType.DOC_COMMENT_LINE:
+            return
+
+        raise CannotParseException(
+            f"Later accessor for property '{prop_name}' must not have a member comment."
+        )
+
+    def _raise_if_non_contiguous_accessor(
+        self,
+        target_elem: CodeElement,
+        prop_name: str,
+        prev_elem: CodeElement | None,
+    ):
+        if not prev_elem is None and prev_elem.name == prop_name:
+            return
+
+        for child_elem in target_elem.children:
+            if (
+                child_elem.elem_type == CodeElementType.PROPERTY
+                and child_elem.name == prop_name
+            ):
+                raise CannotParseException(
+                    f"Accessors for property '{prop_name}' must be contiguous."
+                )
+
+    def _raise_if_index_signature_mismatch(
+        self,
+        left_args: list[CodeElementArgument],
+        right_args: list[CodeElementArgument],
+        prop_name: str,
+    ):
+        if self._get_arg_signature(left_args) == self._get_arg_signature(right_args):
+            return
+
+        raise CannotParseException(
+            f"Index signature mismatch for property '{prop_name}'."
+        )
+
+    def _get_arg_signature(self, args_list: list[CodeElementArgument]):
+        return [
+            (
+                arg_obj.name,
+                arg_obj.type,
+                arg_obj.is_reference,
+                arg_obj.is_optional,
+                arg_obj.is_vlargs,
+                arg_obj.default_value,
+                arg_obj.is_str,
+            )
+            for arg_obj in args_list
+        ]
+
     def _process_property(
         self, s: str, target_elem: CodeElement
     ) -> tuple[bool, CodeElement]:
+        match_result = _re_user_mem_id.match(self._strip_comments(s))
+        if match_result is not None:
+            attr_name = match_result.group(1).strip()
+            user_mem_id = match_result.group(2).strip()
+            if user_mem_id == "0":
+                if attr_name != target_elem.name:
+                    raise CannotParseException(
+                        f"VB_UserMemId attribute name '{attr_name}' does not match property '{target_elem.name}'."
+                    )
+                target_elem.others["is_default_member"] = True
+            return True, target_elem
+
         if _re_end_property.match(self._strip_comments(s)):
             return False, target_elem.parent
 

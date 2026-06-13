@@ -31,6 +31,22 @@ _Avoid_: comments attached to a following member.
 A `'*` comment block attached to the following member, such as a Sub, Function, Property, Enum, Const, or variable.
 _Avoid_: module-level documentation.
 
+**indexed property**:
+A VB6 / VBA Property Get, Property Let, or Property Set that has one or more arguments before the assigned value.
+_Avoid_: assuming the property is also a default member.
+
+**default member**:
+A VB6 / VBA member marked as the default callable member of its containing class, typically by `VB_UserMemId = 0`.
+_Avoid_: any argument-bearing property that lacks a default-member marker.
+
+**default indexed property**:
+An indexed property that is also marked as the default member of its containing class.
+_Avoid_: non-indexed default members.
+
+**non-default indexed property**:
+An indexed property that is not marked as the default member of its containing class.
+_Avoid_: default indexed property.
+
 **interface marker**:
 A marker such as `'# Interface` that makes a class module appear as an interface in generated documentation.
 _Avoid_: the VBA `Implements` statement itself.

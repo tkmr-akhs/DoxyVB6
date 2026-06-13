@@ -148,6 +148,10 @@ class CSharpGenerator(AbstractCodeGenerator):
 
     def _get_args_str(self, target_elem: CodeElement) -> str:
         """Generates the argument string for a method or function."""
+        return self._get_args_list_str(target_elem.arguments)
+
+    def _get_args_list_str(self, target_args: List[CodeElementArgument]) -> str:
+        """Generates the argument string for a list of arguments."""
 
         def _get_args_str_core(arg_obj: CodeElementArgument) -> str:
             val_ref = self._get_valref_str(arg_obj)
@@ -161,12 +165,12 @@ class CSharpGenerator(AbstractCodeGenerator):
 
         result: List[str] = []
 
-        if len(target_elem.arguments) == 0:
+        if len(target_args) == 0:
             return ""
 
-        result.append(_get_args_str_core(target_elem.arguments[0]))
+        result.append(_get_args_str_core(target_args[0]))
 
-        for arg_item in target_elem.arguments[1:]:
+        for arg_item in target_args[1:]:
             result.append(", ")
             result.append(_get_args_str_core(arg_item))
 
@@ -267,6 +271,55 @@ class CSharpGenerator(AbstractCodeGenerator):
         elem_access = self._get_access_str(target_elem)
         elem_static = self._get_static_str(target_elem)
         elem_getset = self._get_getset_str(target_elem)
+        index_args = target_elem.others.get("index_arguments", [])
+        if target_elem.others.get("is_default_member", False) and len(index_args) > 0:
+            elem_args = self._get_args_list_str(index_args)
+            code_lines.append(
+                indent_str
+                + "/// @note Converted from the VB default indexed property "
+                + f"{target_elem.name}."
+            )
+            code_lines.append(
+                indent_str
+                + f"{elem_access}{elem_static}{target_elem.return_type} this[{elem_args}] {{ {elem_getset} }}"
+            )
+            return
+
+        if len(index_args) > 0:
+            elem_args = self._get_args_list_str(index_args)
+            if target_elem.others.get("has_get", False):
+                code_lines.append(
+                    indent_str
+                    + "/// @note Converted from a VB indexed property getter."
+                )
+                code_lines.append(
+                    indent_str
+                    + f"{elem_access}{elem_static}{target_elem.return_type} {target_elem.name}({elem_args})"
+                )
+                code_lines.append(indent_str + "{")
+                code_lines.append(indent_str + "}")
+                code_lines.append(indent_str)
+
+            if target_elem.others.get("has_set", False):
+                setter_value = target_elem.others.get("setter_value_argument")
+                setter_args = list(index_args)
+                if setter_value is not None:
+                    setter_args.append(setter_value)
+                elem_args = self._get_args_list_str(setter_args)
+                code_lines.append(
+                    indent_str
+                    + "/// @note Converted from a VB indexed property setter."
+                )
+                code_lines.append(
+                    indent_str
+                    + f"{elem_access}{elem_static}void {target_elem.name}({elem_args})"
+                )
+                code_lines.append(indent_str + "{")
+                code_lines.append(indent_str + "}")
+                code_lines.append(indent_str)
+
+            return
+
         code_lines.append(
             indent_str
             + f"{elem_access}{elem_static}{target_elem.return_type} {target_elem.name} {{ {elem_getset} }}"

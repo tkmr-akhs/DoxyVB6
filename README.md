@@ -10,6 +10,11 @@ This Python script is an input filter designed to convert Visual Basic 6.0 sourc
 - Processes functions, subprocedures, properties, enums, constants, and variables. (The internal code of functions, subprocedures, and properties is not processed.)
 - For class modules, if you include the comment `'# Interface` in the code, it will be treated as an interface.
 
+## Limitations
+
+- Non-indexed default members are not represented as default-call members. A property marked with `VB_UserMemId = 0` is only converted to an indexer when it has index arguments; otherwise it is documented as a normal property.
+- See [`docs/product-spec.md`](./docs/product-spec.md) for the detailed VB property conversion rules.
+
 ## Usage
 
 1. Place the `build_document.bat` and `build_document_main.ps1` files into a dedicated folder of your choice. Within this chosen folder, create a subfolder named `DoxyVB6`. 
