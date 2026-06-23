@@ -166,3 +166,6 @@ cython_debug/
 !/build_env/build.bat
 /example/data/doc/
 /example/data/modules/
+
+/AGENTS.md
+/docs/agents/
