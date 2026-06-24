@@ -17,10 +17,10 @@ This Python script is an input filter designed to convert Visual Basic 6.0 sourc
 
 ## Usage
 
-1. Place the `build_document.bat` and `build_document_main.ps1` files into a dedicated folder of your choice. Within this chosen folder, create a subfolder named `DoxyVB6`.
+1. Place the `build_document.bat` and `build_document_main.ps1` files into a dedicated tool folder. Within this tool folder, create a subfolder named `DoxyVB6`.
 2. Place the `DoxyVB6.exe` and `Doxyfile` files inside the `DoxyVB6` subfolder.
-3. Create a shortcut to `build_document.bat` in the same directory that contains your `modules` folder. Leave the `Start in` field blank in the shortcut properties.
-4. Double-click the shortcut to generate a `docs` folder.
+3. Create a shortcut to `build_document.bat` in the same directory that contains the folder with your `.bas` or `.cls` files. Leave the `Start in` field blank in the shortcut properties.
+4. The parent folder of the source folder is treated as the project root. Documentation is generated in `docs/api-reference`, and an archive is generated as `docs/api-reference.zip`.
 
 ## License
 

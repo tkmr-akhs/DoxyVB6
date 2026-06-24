@@ -1,16 +1,22 @@
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
-Set-Variable -Name SRC_DIR_NAME -Value "modules" -Option Constant
-Set-Variable -Name DST_DIR_NAME -Value "doc" -Option Constant
+$current_dir = (Get-Location).ProviderPath
+Set-Location $PSScriptRoot
+
+$bat_dir = $args[0]
+$bat_file = $args[1]
+$bat_path = $args[2]
+$arg_dir = $args[3]
+$arg_file = $args[4]
+$arg_path = $args[5]
+
+#Set-Variable -Name SRC_DIR_NAME -Value "modules" -Option Constant
+Set-Variable -Name SRC_DIR_NAME -Value (Split-Path $arg_dir -Leaf) -Option Constant
+Set-Variable -Name DST_DIR_NAME -Value "docs/api-reference" -Option Constant
 Set-Variable -Name ARCHIVE -Value $true -Option Constant
 
-if ([System.String]::IsNullOrEmpty($args[0])) {
-    $proj_root = Get-Location
-}
-else {
-    $proj_root = Split-Path (Get-Item $args[0])
-}
+$proj_root = Split-Path (Get-Item $arg_path)
 Write-Host $proj_root
 
 $src_dir = Join-Path $proj_root $SRC_DIR_NAME
