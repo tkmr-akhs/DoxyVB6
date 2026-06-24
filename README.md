@@ -1,4 +1,4 @@
-# DoxyVB6
+﻿# DoxyVB6
 
 ## Overview
 
@@ -30,4 +30,4 @@ For full license details, please see the [`LICENSE`](./LICENSE) file in this rep
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to open an [issue](https://github.com/tkmr-akhs/DoxyVB6/issues) or submit a pull request.
+Contributions, issues, and feature requests are welcome! Feel free to open an [issue](https://github.com/modern-vba/DoxyVB6/issues) or submit a pull request.
